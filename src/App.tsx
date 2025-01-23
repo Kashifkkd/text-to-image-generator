@@ -1,21 +1,24 @@
 import { useState } from 'react'
 import axios from 'axios'
-import dotenv from 'dotenv'
 
-
-dotenv.config()
 
 function App() {
 
   const [text, setText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const API_KEY = process.env.IMAGE_API_KEY
-
+  const API_KEY = import.meta.env.VITE_IMAGE_API_KEY
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (loading) {
+      return
+    }
+
     try {
+      setLoading(true)
       const response = await axios.post('https://api.deepai.org/api/text2img', {
         text: text,
         image_generator_version: "standard",
@@ -28,8 +31,11 @@ function App() {
         }
       })
       setImageUrl(response.data.output_url)
+      setText('')
     } catch (error) {
       console.error('Error generating image:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -40,12 +46,13 @@ function App() {
         flexDirection: "row",
         backgroundColor: '#f0f2f5',
         height: '100vh',
+        gap: "4rem"
       }}
     >
       <form
         onSubmit={onSubmit}
       >
-        <div style={{ padding: "1rem", gap: "1rem", display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <div style={{ padding: "1rem", gap: "1rem", display: "flex", flexDirection: "row", alignItems: "center", marginTop: "1rem" }}>
           <textarea
             style={{
               width: '20rem',
@@ -78,11 +85,10 @@ function App() {
 
       </form>
 
-      {imageUrl && (
-        <div style={{ marginLeft: '2rem' }}>
-          <img src={imageUrl} alt="Generated" style={{ maxWidth: '100%', borderRadius: '8px' }} />
-        </div>
-      )}
+      <div style={{ marginLeft: '2rem', marginTop: "2rem" }}>
+        {loading ? <div style={{ padding: "1rem"}}><h3>Loading...</h3></div> : imageUrl ? <img src={imageUrl} alt="Generated" style={{ maxWidth: '100%', borderRadius: '8px' }} /> : null}
+      </div>
+
     </div>
   )
 }
