@@ -9,7 +9,7 @@ function App() {
   const [loading, setLoading] = useState(false)
 
   const API_KEY = import.meta.env.VITE_IMAGE_API_KEY
-
+console.log(">>>", API_KEY)
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -27,7 +27,7 @@ function App() {
         genius_preference: "classic"
       }, {
         headers: {
-          'api-key': API_KEY
+          'Api-Key': API_KEY
         }
       })
       setImageUrl(response.data.output_url)
