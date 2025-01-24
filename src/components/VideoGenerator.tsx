@@ -19,7 +19,7 @@ const VideoGenerator = () => {
 
         try {
             setLoading(true)
-            const response = await axios.post('https://api.deepai.org/api/text2video', {
+            const response = await axios.post('https://api.deepai.org/generate_video', {
                 text: text,
             }, {
                 headers: {

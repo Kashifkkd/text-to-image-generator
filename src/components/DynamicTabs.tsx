@@ -105,7 +105,7 @@ const DynamicTabs: React.FC<DynamicTabsProps> = ({ tabs }) => {
   const [activeTab, setActiveTab] = React.useState(0);
 
   return (
-    <Tabs value={activeTab} onChange={(_event, newValue) => setActiveTab(newValue)}>
+    <Tabs value={activeTab} onChange={(_event, newValue) => setActiveTab(newValue as number)}>
       <TabsList>
         {tabs.map((tab, index) => (
           <Tab key={index} value={index}>
